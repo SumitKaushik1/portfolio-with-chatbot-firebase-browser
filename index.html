@@ -26,10 +26,8 @@
   
 
 
-
- <style>
-   
-
+<style>
+    
     .chatbot-container {
       width: 350px;
       max-width: 100%;
@@ -108,6 +106,10 @@
       background: #fff;
       border-top: 1px solid #ddd;
       flex-shrink: 0;
+      position: sticky;
+      bottom: 0;
+      background-color: #fff;
+      z-index: 10;
     }
 
     .response-options {
@@ -221,16 +223,25 @@
       transition: all 0.3s ease;
     }
 
+    .chat-logo span {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      text-align: center;
+      line-height: 1.1;
+    }
+
     .chat-logo:hover {
       background-color: #3b7fc4;
     }
 
     @media screen and (max-width: 480px) {
       .chatbot-container {
-        height: 75%;
-        width: 90%;
-        bottom: 20px;
-        right: 5%;
+        height: 80%;
+        width: 100%;
+        max-width: 100%;
+        bottom: 90px;
       }
 
       .response-options {
@@ -266,7 +277,6 @@
       }
     }
   </style>
-
 
  <style>
 			/* Notification bar styles */
@@ -1438,9 +1448,9 @@ Administered annually by IIT Bombay, GATE is a prestigious examination assessing
   
   <script src="js/main.js"></script>
   
- <div class="chat-logo" id="chatButton"><span>Chat</span></div>
-
-  <div class="chatbot-container" id="chatbotContainer" style="display: none;">
+ <!-- Chatbot HTML structure -->
+  <div class="chat-logo" id="chatButton"><span>Chat</span></div>
+  <div class="chatbot-container" id="chatbotContainer">
     <div class="chat-header">
       Chatbot
       <button class="minimize-btn" id="minimizeButton">−</button>
@@ -1457,8 +1467,167 @@ Administered annually by IIT Bombay, GATE is a prestigious examination assessing
     <button class="save-button" id="saveButton" style="display: none;">Save</button>
   </div>
 
+ 
   <!-- Firebase and Firestore SDK -->
   <script type="module">
-    // JavaScript remains unchanged
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtcWDPIjDZTn6BPBWsy9nvi_h6tXw5nO4",
+      authDomain: "chatbot-5df62.firebaseapp.com",
+      projectId: "chatbot-5df62",
+      storageBucket: "chatbot-5df62.firebasestorage.app",
+      messagingSenderId: "1094943289375",
+      appId: "1:1094943289375:web:38e9460cd198ca043a252a",
+      measurementId: "G-4NE1MBLHT6"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    const chatButton = document.getElementById('chatButton');
+    const chatbotContainer = document.getElementById('chatbotContainer');
+    const chatBody = document.getElementById('chatBody');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const nameInput = document.getElementById('nameInput');
+    const submitNameButton = document.getElementById('submitNameButton');
+    const saveButton = document.getElementById('saveButton');
+    const minimizeButton = document.getElementById('minimizeButton');
+    let chatHistory = [];
+    let userName = '';
+
+    // Predefined bot questions and response options
+    const botDialogs = [
+      {
+        question: "How can I assist you today?",
+        options: ["Tell me a joke", "What's the weather?", "Goodbye"]
+      },
+      {
+        question: "Would you like more help?",
+        options: ["Yes", "No"]
+      },
+      {
+        question: "Where do you live?",
+        options: ["Noida", "Agra"]
+      },
+      {
+        question: "What is your purpose?",
+        options: ["Business1", "Business2"]
+      }
+    ];
+
+    let dialogIndex = 0;
+
+    // Function to add messages to chat
+    function addMessage(message, isUser) {
+      const messageElement = document.createElement('div');
+      messageElement.textContent = message;
+      messageElement.className = isUser ? 'user-message' : 'bot-message';
+      chatBody.appendChild(messageElement);
+      chatBody.scrollTop = chatBody.scrollHeight; // Scroll to bottom
+
+      // Store the message in chat history
+      chatHistory.push((isUser ? 'User: ' : 'Bot: ')+ message);
+    }
+
+    // Function to show response options
+    function showOptions(options) {
+      optionsContainer.innerHTML = ''; // Clear previous options
+      const responseOptionsDiv = document.createElement('div');
+      responseOptionsDiv.className = 'response-options';
+      
+      options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => handleUserResponse(option);
+        responseOptionsDiv.appendChild(button);
+      });
+
+      optionsContainer.appendChild(responseOptionsDiv);
+    }
+
+    // Handle user response
+    function handleUserResponse(response) {
+      addMessage(response, true); // Add user message
+      dialogIndex++; // Move to next dialog
+      if (dialogIndex < botDialogs.length) {
+        const nextDialog = botDialogs[dialogIndex];
+        setTimeout(() => {
+          addMessage(nextDialog.question, false);
+          showOptions(nextDialog.options);
+        }, 500);
+      } else {
+        setTimeout(() => addMessage("Thank you! Have a great day!", false), 500);
+        optionsContainer.innerHTML = ''; // Clear options
+        saveButton.style.display = 'block'; // Show save button
+      }
+    }
+
+    // Event listeners for interactions
+    chatButton.onclick = () => {
+      chatbotContainer.style.display = chatbotContainer.style.display === 'none' ? 'block' : 'none';
+    };
+
+    submitNameButton.onclick = function () {
+      userName = nameInput.value;
+      if (userName.trim()) {
+        addMessage(`Hi ${userName}, how can I assist you today?`, false);
+        optionsContainer.innerHTML = '';
+        setTimeout(() => {
+          addMessage(botDialogs[dialogIndex].question, false);
+          showOptions(botDialogs[dialogIndex].options);
+        }, 500);
+      } else {
+        alert('Please enter your name');
+      }
+    };
+
+    minimizeButton.onclick = function () {
+      chatbotContainer.style.display = 'none';
+    };
+
+    // Save chat to Firebase when the button is clicked
+    saveButton.onclick = async function () {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      let hours = currentDate.getHours();
+      const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+      const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12; // Convert to 12-hour format
+      const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+      const formattedDateTime = `${formattedDate.replace(',', '').replace(/ /g, '_')}_${formattedTime}`;
+
+      // Prepare the chat history as a string or array
+      const chatHistoryText = chatHistory.join('\n');
+
+      try {
+        // Add chat history to Firestore
+        await addDoc(collection(db, "chatHistories"), {
+          userName: userName,
+          chatHistory: chatHistoryText,
+          date: formattedDate,
+          time: formattedTime,
+          formattedDateTime: formattedDateTime,
+        });
+
+        // Show confirmation in the chat
+        addMessage("Your feedback has been saved successfully!", false);
+
+        // Hide save button after saving
+        saveButton.style.display = 'none';
+        optionsContainer.innerHTML = ''; // Clear options after saving
+
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        addMessage("There was an error saving your chat. Please try again later.", false);
+      }
+    };
   </script>
 </html>
