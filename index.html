@@ -21,262 +21,7 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
-
-
-  
-
-
-<style>
-    
-    .chatbot-container {
-      width: 350px;
-      max-width: 100%;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      z-index: 10000;
-      height: 80vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .chat-header {
-      background: #4a90e2;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      position: relative;
-    }
-
-    .chat-header .minimize-btn {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .chat-body {
-      height: 70%;
-      overflow-y: auto;
-      padding: 10px;
-      background: #f9f9f9;
-      border-top: 1px solid #ddd;
-      border-bottom: 1px solid #ddd;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-
-    .chat-body .bot-message,
-    .chat-body .user-message {
-      margin-bottom: 10px;
-      padding: 12px;
-      border-radius: 20px;
-      max-width: 70%;
-      word-wrap: break-word;
-      display: inline-block;
-    }
-
-    .bot-message {
-      background: #e0e0e0;
-      color: #333;
-      align-self: flex-start;
-    }
-
-    .user-message {
-      background: #4a90e2;
-      color: white;
-      align-self: flex-end;
-    }
-
-    .chat-footer {
-      padding: 10px;
-      background: #fff;
-      border-top: 1px solid #ddd;
-      flex-shrink: 0;
-      position: sticky;
-      bottom: 0;
-      background-color: #fff;
-      z-index: 10;
-    }
-
-    .response-options {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      overflow-y: auto;
-      max-height: 100px;
-    }
-
-    .response-options button {
-      background: #4a90e2;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s, transform 0.2s;
-      white-space: nowrap;
-    }
-
-    .response-options button:hover {
-      background: #3b7fc4;
-      transform: scale(1.05);
-    }
-
-    .input-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 10px;
-    }
-
-    .input-container input {
-      padding: 12px;
-      width: 100%;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      font-size: 16px;
-      margin-bottom: 10px;
-      transition: border-color 0.3s;
-    }
-
-    .input-container input:focus {
-      border-color: #4a90e2;
-      outline: none;
-    }
-
-    .input-container button {
-      padding: 12px;
-      width: 100%;
-      border-radius: 5px;
-      background: #4a90e2;
-      color: white;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .input-container button:hover {
-      background: #3b7fc4;
-    }
-
-    .save-button {
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
-      font-size: 16px;
-    }
-
-    .save-button:hover {
-      background: #218838;
-    }
-
-    .thank-you-message {
-      font-size: 16px;
-      color: #4a90e2;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 20px;
-      display: none;
-    }
-
-    .chat-logo {
-      cursor: pointer;
-      width: 80px;
-      height: 80px;
-      background-color: #4a90e2;
-      border-radius: 50%;
-      color: white;
-      font-size: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      text-transform: uppercase;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-      transition: all 0.3s ease;
-    }
-
-    .chat-logo span {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 16px;
-      text-align: center;
-      line-height: 1.1;
-    }
-
-    .chat-logo:hover {
-      background-color: #3b7fc4;
-    }
-
-    @media screen and (max-width: 480px) {
-      .chatbot-container {
-        height: 80%;
-        width: 100%;
-        max-width: 100%;
-        bottom: 90px;
-      }
-
-      .response-options {
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .response-options button {
-        font-size: 12px;
-        padding: 8px 12px;
-      }
-
-      .input-container input,
-      .input-container button {
-        font-size: 14px;
-      }
-
-      .save-button {
-        font-size: 14px;
-        padding: 10px;
-      }
-
-      .chat-logo {
-        width: 60px;
-        height: 60px;
-        font-size: 14px;
-      }
-    }
-
-    @media screen and (max-height: 600px) {
-      .chatbot-container {
-        height: 400px;
-      }
-    }
-  </style>
+	
 
  <style>
 			/* Notification bar styles */
@@ -346,11 +91,18 @@
 			  }
 			}
   </style>
-
-
-
-     <style>
+  
+  
+   <style>
     
+	
+	#save {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  z-index: 10;
+}
 
     .chatbot-container {
       width: 350px;
@@ -434,6 +186,7 @@
       bottom: 0;
       background-color: #fff;
       z-index: 10;
+    
     }
 
     .response-options {
@@ -512,6 +265,7 @@
       margin-top: 10px;
       width: 100%;
       font-size: 16px;
+   
     }
 
     .save-button:hover {
@@ -601,10 +355,6 @@
       }
     }
   </style>
-
-
-
-
 
 
 
@@ -1448,7 +1198,7 @@ Administered annually by IIT Bombay, GATE is a prestigious examination assessing
   
   <script src="js/main.js"></script>
   
- <!-- Chatbot HTML structure -->
+  <!-- Chatbot HTML structure -->
   <div class="chat-logo" id="chatButton"><span>Chat</span></div>
   <div class="chatbot-container" id="chatbotContainer">
     <div class="chat-header">
@@ -1464,7 +1214,9 @@ Administered annually by IIT Bombay, GATE is a prestigious examination assessing
         <button id="submitNameButton">Submit</button>
       </div>
     </div>
-    <button class="save-button" id="saveButton" style="display: none;">Save</button>
+	<div  id="save">
+        <button class="save-button" id="saveButton" style="display: none;">Save</button>
+    </div>
   </div>
 
  
@@ -1552,22 +1304,30 @@ Administered annually by IIT Bombay, GATE is a prestigious examination assessing
       optionsContainer.appendChild(responseOptionsDiv);
     }
 
+
+
+
     // Handle user response
-    function handleUserResponse(response) {
-      addMessage(response, true); // Add user message
-      dialogIndex++; // Move to next dialog
-      if (dialogIndex < botDialogs.length) {
-        const nextDialog = botDialogs[dialogIndex];
-        setTimeout(() => {
-          addMessage(nextDialog.question, false);
-          showOptions(nextDialog.options);
-        }, 500);
-      } else {
-        setTimeout(() => addMessage("Thank you! Have a great day!", false), 500);
-        optionsContainer.innerHTML = ''; // Clear options
-        saveButton.style.display = 'block'; // Show save button
-      }
-    }
+   function handleUserResponse(response) {
+  addMessage(response, true); // Add user message
+  dialogIndex++; // Move to next dialog
+  if (dialogIndex < botDialogs.length) {
+    const nextDialog = botDialogs[dialogIndex];
+    setTimeout(() => {
+      addMessage(nextDialog.question, false);
+      showOptions(nextDialog.options);
+    }, 500);
+  } else {
+    setTimeout(() => addMessage("Thank you! Have a great day!", false), 500);
+    optionsContainer.innerHTML = ''; // Clear options
+    saveButton.style.display = 'block'; // Show save button
+    saveButton.style.width = '100%';  // Make Save button full-width
+  
+  
+  }
+}
+
+
 
     // Event listeners for interactions
     chatButton.onclick = () => {
